@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Career Roles - Student Skill Gap Analysis{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <h2 class="fw-bold">Explore Career Pathways</h2>
+        <p class="text-muted">Discover industry demands and required core competencies for top technology roles.</p>
+    </div>
+
+    <div class="row g-4">
+        {% for c_name, c_info in careers.items() %}
+        <div class="col-md-6 col-lg-4">
+            <div class="card h-100 border-0 shadow-sm p-4 d-flex flex-column">
+                <h4 class="fw-bold text-primary mb-2">{{ c_name }}</h4>
+                <p class="text-muted small flex-grow-1">{{ c_info.description }}</p>
+                <h6 class="fw-bold small text-secondary">Required Core Skills:</h6>
+                <div class="d-flex flex-wrap gap-1 mb-4">
+                    {% for skill in c_info.required_skills %}
+                        <span class="badge bg-light text-dark border">{{ skill }}</span>
+                    {% endfor %}
+                </div>
+                <a href="{{ url_for('skill_analysis', career=c_name) }}" class="btn btn-primary w-100">
+                    <i class="bi bi-graph-up me-1"></i>Analyze Gap for This Role
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

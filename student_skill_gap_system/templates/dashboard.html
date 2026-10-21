@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% block title %}Dashboard - {{ student.name }}{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="card bg-primary text-white border-0 shadow-sm p-4 mb-4">
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+            <div>
+                <span class="badge bg-warning text-dark px-3 py-1 mb-2">Student Portal</span>
+                <h2 class="fw-bold mb-1">Welcome back, {{ student.name }}!</h2>
+                <p class="mb-0 opacity-75">
+                    {{ student.department }} &bull; {{ student.year_of_study }} &bull; Target Career: <strong>{{ student.target_career }}</strong>
+                </p>
+            </div>
+            <a href="{{ url_for('skill_analysis') }}" class="btn btn-warning text-dark fw-bold px-3">
+                <i class="bi bi-graph-up-arrow me-1"></i>New Skill Analysis
+            </a>
+        </div>
+    </div>
+
+    {% if latest %}
+    <div class="row g-4 mb-4">
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm p-4 text-center h-100">
+                <h6 class="text-muted fw-bold">Current Skill Gap</h6>
+                <div class="display-4 fw-bold text-danger my-2">{{ latest.skill_gap_percentage }}%</div>
+                <p class="text-muted small mb-0">For {{ latest.target_career }}</p>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="card border-0 shadow-sm p-4 h-100">
+                <h5 class="fw-bold mb-3">Action Items for {{ latest.target_career }}</h5>
+                <div class="mb-2">
+                    <strong class="text-danger small">Missing Skills to Master:</strong>
+                    <div class="d-flex flex-wrap gap-2 mt-1">
+                        {% set missing = latest.missing_skills | from_json if latest.missing_skills is string else latest.missing_skills %}
+                        {% for s in missing %}
+                            <span class="badge bg-danger-subtle text-danger border border-danger">{{ s }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <div class="card border-0 shadow-sm p-4">
+        <h5 class="fw-bold mb-3">Assessment History</h5>
+        {% if assessments %}
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>Date & Time</th>
+                        <th>Target Career</th>
+                        <th>Gap %</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for a in assessments %}
+                    <tr>
+                        <td>{{ a.created_at }}</td>
+                        <td><span class="badge bg-primary">{{ a.target_career }}</span></td>
+                        <td>
+                            <div class="progress" style="height: 18px; min-width: 120px;">
+                                <div class="progress-bar bg-danger" style="width: {{ a.skill_gap_percentage }}%;">
+                                    {{ a.skill_gap_percentage }}%
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <a href="{{ url_for('skill_analysis', career=a.target_career) }}" class="btn btn-outline-primary btn-sm">
+                                Re-Assess
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="text-muted mb-0">No past assessments found. Take your first analysis today!</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

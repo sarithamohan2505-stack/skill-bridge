@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% block title %}Home - Student Skill Gap Analysis{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section py-5 text-white">
+    <div class="container py-4 text-center">
+        <span class="badge bg-warning text-dark px-3 py-2 rounded-pill fw-semibold mb-3">College Final/Mini Project Demonstration</span>
+        <h1 class="display-4 fw-extrabold mb-3">Discover Your Skills.<br><span class="text-warning">Bridge Your Gaps.</span> Build Your Future.</h1>
+        <p class="lead mb-4 mx-auto" style="max-width: 720px; opacity: 0.92;">
+            An intelligent, data-driven skill assessment platform designed to help students map their competencies against real-world industry benchmarks and unlock tailored course recommendations.
+        </p>
+        <div class="d-flex justify-content-center gap-3 flex-wrap">
+            <a href="{{ url_for('skill_analysis') }}" class="btn btn-warning btn-lg fw-bold px-4 shadow">
+                <i class="bi bi-graph-up-arrow me-2"></i>Analyze My Skills
+            </a>
+            <a href="{{ url_for('recommendations') }}" class="btn btn-outline-light btn-lg px-4">
+                <i class="bi bi-book-half me-2"></i>Explore Courses
+            </a>
+            {% if not session.get('student_id') %}
+            <a href="{{ url_for('register') }}" class="btn btn-light btn-lg px-4 text-primary fw-semibold">
+                Get Started
+            </a>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-5 bg-white">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Intelligent Career Guidance Features</h2>
+            <p class="text-muted">Designed specifically to bridge the academia-to-industry employability divide.</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm p-4 text-center feature-card">
+                    <div class="icon-bubble mx-auto mb-3 bg-primary text-white">
+                        <i class="bi bi-bullseye fs-3"></i>
+                    </div>
+                    <h4 class="fw-bold">Mathematical Skill Gap Analysis</h4>
+                    <p class="text-muted">Computes your exact skill deficit percentage against target job roles using standardized skill difference formulas.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm p-4 text-center feature-card">
+                    <div class="icon-bubble mx-auto mb-3 bg-purple text-white">
+                        <i class="bi bi-compass fs-3"></i>
+                    </div>
+                    <h4 class="fw-bold">Targeted Career Exploration</h4>
+                    <p class="text-muted">Explore curated career paths including Data Analyst, Data Scientist, ML Engineer, Python Developer, and Business Analyst.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm p-4 text-center feature-card">
+                    <div class="icon-bubble mx-auto mb-3 bg-success text-white">
+                        <i class="bi bi-award fs-3"></i>
+                    </div>
+                    <h4 class="fw-bold">Curated Course Suggestions</h4>
+                    <p class="text-muted">Receive 100% verified, real-world course recommendations from freeCodeCamp, Harvard CS50, Kaggle Learn, and Khan Academy.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">How It Works</h2>
+            <p class="text-muted">Three simple steps to transition from academic learning to career readiness.</p>
+        </div>
+        <div class="row g-4 text-center">
+            <div class="col-md-4">
+                <div class="p-3">
+                    <div class="step-badge mx-auto mb-3">1</div>
+                    <h5 class="fw-bold">Choose Career & Enter Skills</h5>
+                    <p class="text-muted small">Select your target profession and check the skills you have learned in college coursework or self-study.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="p-3">
+                    <div class="step-badge mx-auto mb-3">2</div>
+                    <h5 class="fw-bold">Automated Gap Calculation</h5>
+                    <p class="text-muted small">Our algorithm compares existing skills with market requirements and determines your precise deficiency percentage.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="p-3">
+                    <div class="step-badge mx-auto mb-3">3</div>
+                    <h5 class="fw-bold">Follow Course Recommendations</h5>
+                    <p class="text-muted small">Access free, top-rated learning resources specifically addressing your missing skills to become job-ready.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

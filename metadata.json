@@ -1,0 +1,6 @@
+{
+  "name": "Student Skill Gap Analysis & Course Suggestion System",
+  "description": "An interactive educational platform helping students analyze skill gaps for target careers and receive curated course recommendations with real verified learning resources.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

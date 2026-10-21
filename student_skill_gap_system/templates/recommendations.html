@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+{% block title %}Skill Gap Results & Recommendations{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    {% if skill_gap_pct is defined %}
+    <!-- Assessment Summary Card -->
+    <div class="card border-0 shadow-sm p-4 mb-4">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <span class="badge bg-primary px-3 py-2 rounded-pill mb-2">Target Career: {{ career }}</span>
+                <h2 class="fw-bold">Your Skill Gap Analysis Results</h2>
+                <p class="text-muted mb-3">
+                    Calculated via: <code>Skill Gap % = (Missing Skills / Total Required Skills) × 100</code>
+                </p>
+
+                <div class="row g-3">
+                    <div class="col-sm-4">
+                        <div class="p-3 bg-light rounded text-center border">
+                            <div class="fs-3 fw-bold text-primary">{{ required_skills | length }}</div>
+                            <div class="small text-muted">Required Skills</div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="p-3 bg-light rounded text-center border">
+                            <div class="fs-3 fw-bold text-success">{{ matched_skills | length }}</div>
+                            <div class="small text-muted">Matched Skills</div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="p-3 bg-light rounded text-center border">
+                            <div class="fs-3 fw-bold text-danger">{{ missing_skills | length }}</div>
+                            <div class="small text-muted">Missing Skills</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 text-center mt-4 mt-md-0">
+                <div class="position-relative d-inline-block">
+                    <canvas id="gapChart" width="180" height="180"></canvas>
+                </div>
+                <h5 class="fw-bold mt-2 text-danger">Skill Gap: {{ skill_gap_pct }}%</h5>
+            </div>
+        </div>
+
+        <hr class="my-4">
+
+        <div class="row g-4">
+            <div class="col-md-6">
+                <h5 class="fw-bold text-success"><i class="bi bi-check-circle-fill me-2"></i>Skills You Already Have</h5>
+                {% if matched_skills %}
+                    <ul class="list-group">
+                    {% for s in matched_skills %}
+                        <li class="list-group-item list-group-item-success d-flex justify-content-between align-items-center">
+                            {{ s }}
+                            <span class="badge bg-success">Matched</span>
+                        </li>
+                    {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="text-muted small">No matching skills detected for this role yet. Don't worry—the recommended courses below will get you started!</p>
+                {% endif %}
+            </div>
+            <div class="col-md-6">
+                <h5 class="fw-bold text-danger"><i class="bi bi-exclamation-triangle-fill me-2"></i>Skills You Need to Learn</h5>
+                {% if missing_skills %}
+                    <ul class="list-group">
+                    {% for s in missing_skills %}
+                        <li class="list-group-item list-group-item-danger d-flex justify-content-between align-items-center">
+                            {{ s }}
+                            <span class="badge bg-danger">Action Needed</span>
+                        </li>
+                    {% endfor %}
+                    </ul>
+                {% else %}
+                    <div class="alert alert-success">
+                        <strong>Outstanding!</strong> You have matched 100% of the core skills for {{ career }}.
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Recommended Courses Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+        <div>
+            <h3 class="fw-bold mb-0">Recommended Courses</h3>
+            <p class="text-muted mb-0">Verified learning paths to close your identified skill gaps.</p>
+        </div>
+        <a href="{{ url_for('skill_analysis') }}" class="btn btn-outline-primary btn-sm">
+            <i class="bi bi-arrow-repeat me-1"></i>Perform New Analysis
+        </a>
+    </div>
+
+    <!-- Course Cards Grid -->
+    <div class="row g-4">
+        {% if courses %}
+            {% for c in courses %}
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 border-0 shadow-sm course-card">
+                    <div class="card-body d-flex flex-column">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <span class="badge bg-primary">{{ c.skill_covered }}</span>
+                            <span class="badge bg-secondary">{{ c.platform }}</span>
+                        </div>
+                        <h5 class="card-title fw-bold">{{ c.title }}</h5>
+                        <p class="card-text text-muted small flex-grow-1">{{ c.description }}</p>
+                        <div class="py-2 border-top border-bottom small text-secondary d-flex justify-content-between mb-3">
+                            <span><i class="bi bi-bar-chart-fill me-1"></i>{{ c.difficulty }}</span>
+                            <span><i class="bi bi-clock-fill me-1"></i>{{ c.duration }}</span>
+                        </div>
+                        <a href="{{ c.url }}" target="_blank" rel="noopener noreferrer" class="btn btn-primary w-100">
+                            <i class="bi bi-box-arrow-up-right me-1"></i>Start Course
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="col-12 text-center py-5">
+                <i class="bi bi-check2-all text-success display-3"></i>
+                <h4 class="fw-bold mt-3">No Missing Skills Found!</h4>
+                <p class="text-muted">You already meet all the core requirements for this career track.</p>
+                <a href="{{ url_for('careers') }}" class="btn btn-outline-primary">Explore Other Careers</a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+{% if skill_gap_pct is defined %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const ctx = document.getElementById('gapChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Skills Matched', 'Skill Gap'],
+            datasets: [{
+                data: [{{ matched_skills | length }}, {{ missing_skills | length }}],
+                backgroundColor: ['#198754', '#dc3545'],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            responsive: false,
+            cutout: '70%',
+            plugins: {
+                legend: { display: false }
+            }
+        }
+    });
+});
+</script>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}About the Project{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-9">
+            <div class="card border-0 shadow-sm p-4 p-md-5">
+                <h2 class="fw-bold text-primary mb-3">About the Skill Gap Analysis System</h2>
+                <p class="lead text-muted">
+                    This project was created to address the significant employability divide facing undergraduate college students in technical fields.
+                </p>
+                <hr class="my-4">
+                <h4 class="fw-bold">1. Project Purpose</h4>
+                <p class="text-secondary">
+                    While university curricula provide theoretical grounding, employers look for specific applied tooling and programming competencies. This tool enables students to self-audit their skill profiles against authentic market requirements.
+                </p>
+
+                <h4 class="fw-bold mt-4">2. Core Methodology & Formula</h4>
+                <p class="text-secondary">
+                    The system evaluates student inputs through strict set-theoretic comparison:
+                </p>
+                <div class="p-3 bg-light rounded border mb-3 font-monospace small">
+                    Missing Skills = Required Skills − Existing Skills<br>
+                    Skill Gap Percentage = (Number of Missing Skills / Total Required Skills) × 100
+                </div>
+
+                <h4 class="fw-bold mt-4">3. Honest System Limitations</h4>
+                <ul class="text-secondary small">
+                    <li><strong>Self-Reported Data:</strong> Skill proficiency relies on student input rather than automated code tests.</li>
+                    <li><strong>Standardized Profiles:</strong> Roles like "Data Scientist" vary across firms; standard templates represent generalized industry consensus.</li>
+                    <li><strong>Static Course Catalog:</strong> Course links are curated and verified but don't track dynamic third-party price changes.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
